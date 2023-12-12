@@ -14,7 +14,7 @@ contract('Box', function ([ owner, other ]) {
   const value = new BN('42');
 
   beforeEach(async function () {
-    this.box = await Box.new(owner);
+    this.box = await Box.new({ from: owner });
   });
 
   it('retrieve returns a value previously stored', async function () {

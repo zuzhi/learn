@@ -1,13 +1,25 @@
-// scripts/index.js
+// scripts/index-standalone.js
+//
+// Run example:
+// $ HARDHAT_NETWORK=localhost node scripts/index-standalone.js 0x0165878A594ca255338adfa4d48449f69242Eb8F
+//
+const hre = require("hardhat");
+
 async function main () {
+  await hre.run("compile");
+
   // Retrieve accounts from the local node
-  const accounts = await ethers.provider.listAccounts();
+  const accounts = await hre.ethers.provider.listAccounts();
   console.log(accounts);
 
   // Set up an ethers contract, representing our deployed Box instance
-  // REPLACE this address with current Box contract address, once deployed
-  const address = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-  const Box = await ethers.getContractFactory('Box');
+  const [address] = process.argv.slice(2);
+  if (!address) {
+    console.error('Please provide the contract address as a command line argument.');
+    return;
+  }
+
+  const Box = await hre.ethers.getContractFactory('Box');
   const box = await Box.attach(address);
 
   // Send a transaction to store() a new value in the Box
